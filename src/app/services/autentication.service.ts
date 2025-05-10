@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import jwtDecode from 'jwt-decode';
-import { environment } from 'src/environments/environment';
+import { jwtDecode } from 'jwt-decode'; // Corrige la importación de jwtDecode
+import { environment } from '../../environments/environment'; // Corrige la ruta de environment
 
 @Injectable({
   providedIn: 'root'

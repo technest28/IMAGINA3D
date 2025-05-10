@@ -1,0 +1,63 @@
+
+.navbar {
+  transition: background-color 0.5s cubic-bezier(0.21, -0.04, 1, 0.77), color 0.5s cubic-bezier(0.21, -0.04, 1, 0.77);
+}
+
+.navbar-transparent {
+
+  color: #1e2a38;
+  box-shadow: none;
+}
+
+
+.navbar-scrolled {
+  background-color: #1e2a38;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+.navbar-open {
+  background-color: #1e2a38;
+  color: white;
+}
+
+
+.nav-link {
+  color: #1e2a38 !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #1abc9c !important;
+}
+
+/* .nav-link.active {
+  color: #48cff7 !important;
+} */
+
+.navbar-scrolled .nav-link {
+  color: white !important;
+}
+
+.navbar-scrolled .nav-link:hover {
+  color: #1abc9c !important;
+}
+
+/* Marca del navbar */
+.navbar-brand {
+  color: #1e2a38 !important;
+}
+
+.navbar-scrolled .navbar-brand {
+  color: white !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='black' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-scrolled .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='white' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}

@@ -1,1 +1,55 @@
-<p>usuarios works!</p>
+<div class="table-users">
+  <div class="header-actions">
+    <div class="table-title">Monitoreo de usuarios</div>
+    <div class="add-user-button">
+      <button (click)="openCreateModal()">
+        <i class="fas fa-plus"></i> Agregar usuario
+      </button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellidos</th>
+        <th>Correo</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of paginatedUsers">
+        <td data-label="Nombre">{{ usuario.name }}</td>
+        <td data-label="Apellidos">{{ usuario.lastnameFather }} {{ usuario.lastnameMother }}</td>
+        <td data-label="Correo">{{ usuario.email }}</td>
+        <td data-label="Rol">{{ usuario.role.name }}</td>
+        <td data-label="Acciones">
+          <button class="btn-info" title="Editar" (click)="updateUser(usuario)">
+            <i class="fas fa-pen"></i>
+          </button>
+          <button class="btn-danger" title="Eliminar" (click)="deleteUser(usuario._id)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <button (click)="goToPage(i + 1)" [class.active]="currentPage === (i + 1)">
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
+</div>
+
+<div *ngIf="showCreateModal" class="backdrop"></div>
+<app-form-usuarios *ngIf="showCreateModal" class="col-12 col-md-8 col-lg-6" (close)="closeCreateModal()"
+  [selectedUser]="selectedUser">
+</app-form-usuarios>

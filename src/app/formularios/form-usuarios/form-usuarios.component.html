@@ -1,0 +1,52 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Formulario de Usuarios</h2>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+  </div>
+  <form class="row" (submit)="saveUser()">
+    <div class="col-12 mb-3">
+      <label for="name" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="name" name="name" [(ngModel)]="newUser.name"
+        placeholder="Ingresa el nombre del usuario" required>
+    </div>
+
+    <div class="col-12 mb-3">
+      <label for="lastnameFather" class="form-label">Apellido Paterno</label>
+      <input type="text" class="form-control" id="lastnameFather" name="lastnameFather"
+        [(ngModel)]="newUser.lastnameFather" placeholder="Ingresa el apellido paterno" required>
+    </div>
+
+    <div class="col-12 mb-3">
+      <label for="lastnameMother" class="form-label">Apellido Materno</label>
+      <input type="text" class="form-control" id="lastnameMother" name="lastnameMother"
+        [(ngModel)]="newUser.lastnameMother" placeholder="Ingresa el apellido materno" required>
+    </div>
+
+    <div class="col-12 mb-3">
+      <label for="email" class="form-label">Correo Electrónico</label>
+      <input type="email" class="form-control" id="email" name="email" [(ngModel)]="newUser.email"
+        placeholder="Ingresa el correo electrónico" required>
+    </div>
+
+    <div class="col-12 mb-3" *ngIf="!newUser._id">
+      <label for="password" class="form-label">Contraseña</label>
+      <input type="password" class="form-control" id="password" name="password" [(ngModel)]="newUser.password"
+        placeholder="Ingresa la contraseña" required>
+    </div>
+
+    <div class="col-12 mb-3">
+      <label for="role" class="form-label">Rol</label>
+      <select class="form-control" id="role" name="role" [(ngModel)]="newUser.role._id" required>
+        <option value="" disabled selected>Seleccione un rol</option>
+        <option *ngFor="let role of roles" [value]="role._id">{{ role.name }}</option>
+      </select>
+    </div>
+
+
+    <div class="col-12 text-end">
+      <button type="submit" class="btn btn-primary" style="width: 100%;">
+        {{ newUser._id ? 'Actualizar Usuario' : 'Guardar Usuario' }}
+      </button>
+    </div>
+  </form>
+</div>

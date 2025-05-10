@@ -1,0 +1,44 @@
+.footer {
+  background-color: #000;
+  color: #fff;
+}
+
+.footer a {
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.footer h5 {
+  font-size: 16px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.footer ul {
+  padding: 0;
+  list-style: none;
+}
+
+.footer ul li {
+  margin-bottom: 10px;
+}
+
+.footer ul li i {
+  margin-right: 10px;
+}
+
+.footer img {
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.footer .form-control {
+  border-radius: 0;
+}
+
+.footer .btn-primary {
+  border-radius: 0;
+}

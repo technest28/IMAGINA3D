@@ -1,1 +1,49 @@
-<p>form-inventario works!</p>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>Formulario de Inventario</h2>
+      <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+  </div>
+  <form class="row" (submit)="saveInventory()">
+      <div class="col-12 mb-3">
+          <label for="name" class="form-label">Nombre del Producto</label>
+          <input type="text" class="form-control" id="name" name="name" [(ngModel)]="newInventory.name"
+              placeholder="Ingresa el nombre del producto" required>
+      </div>
+
+      <div class="col-12 mb-3">
+          <label for="category" class="form-label">Categoría</label>
+          <input type="text" class="form-control" id="category" name="category" [(ngModel)]="newInventory.category"
+              placeholder="Ingresa la categoría" required>
+      </div>
+
+      <div class="col-md-6 mb-3">
+          <label for="quantity" class="form-label">Cantidad</label>
+          <input type="number" class="form-control" id="quantity" name="quantity" [(ngModel)]="newInventory.quantity"
+              min="0" placeholder="Ingresa la cantidad" required>
+      </div>
+
+      <div class="col-12 mb-3">
+          <label for="material" class="form-label">Material</label>
+          <select class="form-control" id="material" name="material" [(ngModel)]="newInventory.material" required>
+              <option value="" disabled>Seleccione un material</option>
+              <option *ngFor="let material of materials" [value]="material._id">
+                  {{ material.name }}
+              </option>
+          </select>
+      </div>
+
+      <div class="col-12 mb-3">
+          <label for="status" class="form-label">Estado</label>
+          <select class="form-control" id="status" name="status" [(ngModel)]="newInventory.status" required>
+              <option [value]="true">Disponible</option>
+              <option [value]="false">No Disponible</option>
+          </select>
+      </div>
+
+      <div class="col-12 text-end">
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+              {{ newInventory._id ? 'Actualizar Inventario' : 'Guardar Inventario' }}
+          </button>
+      </div>
+  </form>
+</div>

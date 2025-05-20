@@ -1,1 +1,174 @@
-<p>form-gastos works!</p>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Formulario de Gastos</h2>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="closeModal()"
+    ></button>
+  </div>
+  <form class="row" (submit)="saveExpense()">
+    <div class="col-12 mb-3">
+      <label for="customer" class="form-label">Cliente o servicio</label>
+      <input
+        type="text"
+        class="form-control"
+        id="customer"
+        name="customer"
+        [(ngModel)]="newExpense.customer"
+        placeholder="Ingresa el nombre del cliente"
+        required
+      />
+    </div>
+
+    <div class="col-12 mb-3">
+      <label for="item" class="form-label">Artículo</label>
+      <select
+        class="form-control"
+        id="item"
+        name="item"
+        [(ngModel)]="newExpense.item"
+        (change)="onItemChange()"
+        required
+      >
+        <option value="" disabled selected>Selecciona un artículo</option>
+        <option value="Sueldo">Sueldo</option>
+        <option value="Luz">Luz</option>
+        <option value="Internet">Internet</option>
+        <option value="Renta">Renta</option>
+        <option value="Otros">Otros</option>
+      </select>
+    </div>
+
+    <div class="col-12 mb-3" *ngIf="newExpense.item === 'Sueldo'">
+      <div *ngFor="let day of newExpense.salaryDetails" class="mb-4 p-3" style="background-color: #f8f9fa;">
+        <label [for]="day.day" class="form-label">{{ day.day }}</label>
+
+        <input
+          type="date"
+          class="form-control mb-2"
+          [id]="day.day"
+          [name]="day.day"
+          [(ngModel)]="day.date"
+          placeholder="Fecha"
+        />
+
+        <div class="row">
+          <div class="col-md-6 mb-2">
+            <label [for]="day.day + 'StartTime'" class="form-label"
+              >Hora de inicio</label
+            >
+            <input
+              type="time"
+              class="form-control"
+              [id]="day.day + 'StartTime'"
+              [name]="day.day + 'StartTime'"
+              [(ngModel)]="day.startTime"
+              (ngModelChange)="onTimeOrPriceChange(day)"
+              placeholder="Hora de inicio"
+            />
+          </div>
+
+          <div class="col-md-6 mb-2">
+            <label [for]="day.day + 'EndTime'" class="form-label"
+              >Hora de fin</label
+            >
+            <input
+              type="time"
+              class="form-control"
+              [id]="day.day + 'EndTime'"
+              [name]="day.day + 'EndTime'"
+              [(ngModel)]="day.endTime"
+              (ngModelChange)="onTimeOrPriceChange(day)"
+              placeholder="Hora de fin"
+            />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-2">
+            <label [for]="day.day + 'Price'" class="form-label"
+              >Precio por hora</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              [id]="day.day + 'Price'"
+              [name]="day.day + 'Price'"
+              [(ngModel)]="day.price"
+              (ngModelChange)="onTimeOrPriceChange(day)"
+              placeholder="Precio por hora"
+            />
+          </div>
+
+          <div class="col-md-6 mb-2">
+            <label [for]="day.day + 'TotalPrice'" class="form-label"
+              >Precio total</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              [id]="day.day + 'TotalPrice'"
+              [name]="day.day + 'TotalPrice'"
+              [(ngModel)]="day.totalPrice"
+              readonly
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 mb-3" *ngIf="newExpense.item === 'Otros'">
+      <label for="description" class="form-label">Descripción</label>
+      <textarea
+        class="form-control"
+        id="description"
+        name="description"
+        [(ngModel)]="newExpense.description"
+        placeholder="Ingresa una descripción"
+      ></textarea>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label for="date" class="form-label">Fecha de egreso</label>
+      <input
+        type="date"
+        class="form-control"
+        id="date"
+        name="date"
+        [(ngModel)]="newExpense.date"
+        required
+      />
+    </div>
+
+    <!--
+    <div class="col-md-6 mb-3">
+      <label for="month" class="form-label">Mes</label>
+      <input type="text" class="form-control" id="month" name="month" placeholder="Ingresa el mes"
+        [(ngModel)]="newExpense.month" required>
+    </div>
+    -->
+
+    <div class="col-md-6 mb-3">
+      <label for="cost" class="form-label">Costo total</label>
+      <input
+        type="number"
+        class="form-control"
+        id="cost"
+        name="cost"
+        min="0"
+        placeholder="Ingresa el costo"
+        [(ngModel)]="newExpense.cost"
+        [readonly]="newExpense.item === 'Sueldo'"
+        required
+      />
+    </div>
+
+    <div class="col-12 text-end">
+      <button type="submit" class="btn btn-primary" style="width: 100%">
+        {{ newExpense._id ? "Actualizar Gasto" : "Guardar Gasto" }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,1 +1,74 @@
-<p>form-materiales works!</p>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Formulario de compras</h2>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+  </div>
+  <form  class="row" (submit)="saveMaterial()">
+    <div class="col-12 mb-3">
+      <label for="name" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="name" name="name" [(ngModel)]="newMaterial.name" placeholder="Ingresa el nombre" required>
+    </div>
+
+    <div class="col-12 mb-3">
+      <label for="supplier" class="form-label">Proveedor</label>
+      <input type="text" class="form-control" id="supplier" name="supplier" [(ngModel)]="newMaterial.supplier" placeholder="Ingresa el proveedor">
+    </div>
+
+    <div class="col-12 mb-3">
+      <label for="description" class="form-label">Descripción</label>
+      <textarea class="form-control" id="description" name="description" rows="3" [(ngModel)]="newMaterial.description" placeholder="Ingresa la descripción"  required></textarea>
+    </div>
+
+
+    <div class="col-md-6 mb-3">
+      <label for="price" class="form-label">Precio</label>
+      <input type="number" class="form-control" id="price" name="price" min="0" [(ngModel)]="newMaterial.price" placeholder="Ingresa el precio"  required (input)="calculateTotal()">
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label for="quantity" class="form-label">Cantidad</label>
+      <input type="number" class="form-control" id="quantity" name="quantity" min="0" [(ngModel)]="newMaterial.quantity" placeholder="Ingresa la cantidad"  required (input)="calculateTotal()">
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label for="purchaseDate" class="form-label">Fecha de Compra</label>
+      <input type="date" class="form-control" id="purchaseDate" name="purchaseDate" [(ngModel)]="newMaterial.purchaseDate"  required>
+    </div>
+
+    <div class="col-md-6 mb-3 d-flex align-items-center " style="margin: auto;">
+      <label for="monthlyFee" class="form-label me-2">¿Pago a meses?</label>
+      <input type="checkbox" class="form-check-input" id="monthlyFee" name="monthlyFee" [(ngModel)]="newMaterial.monthlyFee">
+    </div>
+
+    <div class="col-md-6 mb-3" *ngIf="newMaterial.monthlyFee">
+      <label for="monthlyFeeMonth" class="form-label">Número de meses</label>
+      <input type="number" class="form-control" id="monthlyFeeMonth" name="monthlyFeeMonth" min="0" [(ngModel)]="newMaterial.monthlyFeeMonth" (input)="calculateTotalMonthlyFee(); calculateInterest()">
+    </div>
+
+    <div class="col-md-6 mb-3" *ngIf="newMaterial.monthlyFee">
+      <label for="monthlyPayment" class="form-label">Pago mensual</label>
+      <input type="number" class="form-control" id="monthlyPayment" name="monthlyPayment" min="0" [(ngModel)]="newMaterial.monthlyPayment" (input)="calculateTotalMonthlyFee(); calculateInterest()">
+    </div>
+
+    <div class="col-md-6 mb-3" *ngIf="newMaterial.monthlyFee">
+      <label for="totalMonthlyFee" class="form-label">Total con interes</label>
+      <input type="number" class="form-control" id="totalMonthlyFee" name="totalMonthlyFee" min="0" [(ngModel)]="newMaterial.totalMonthlyFee" readonly>
+    </div>
+
+    <div class="col-md-6 mb-3" *ngIf="newMaterial.monthlyFee">
+      <label for="interest" class="form-label">Interés aplicado</label>
+      <input type="number" class="form-control" id="interest" name="interest" min="0" [(ngModel)]="newMaterial.interest" readonly>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label for="total" class="form-label">Total de compra sin interes</label>
+      <input type="number" class="form-control" id="total" name="total" min="0" [(ngModel)]="newMaterial.total" readonly (input)="calculateInterest()">
+    </div>
+
+    <div class="col-12 text-end">
+      <button type="submit" class="btn btn-primary" style="width: 100%;">
+        {{ newMaterial._id ? 'Actualizar Material' : 'Guardar Material' }}
+      </button>
+    </div>
+  </form>
+</div>

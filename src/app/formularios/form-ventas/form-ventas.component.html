@@ -1,1 +1,82 @@
-<p>form-ventas works!</p>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>Formulario de Ventas</h2>
+      <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+  </div>
+  <form class="row" (submit)="saveSale()">
+      <div class="col-12 mb-3">
+          <label for="itemModel" class="form-label">Modelo del Artículo</label>
+          <select class="form-control" id="itemModel" name="itemModel" [(ngModel)]="newSale.itemModel"
+              (change)="loadItems()" required>
+              <option value="Order">Pedido</option>
+          </select>
+      </div>
+
+      <div class="col-12 mb-3">
+          <label for="item" class="form-label">Artículo</label>
+          <select class="form-control" id="item" name="item" [(ngModel)]="newSale.item" (change)="onItemChange()"
+              required>
+              <option value="" disabled selected>Seleccione un artículo</option>
+              <option *ngFor="let item of items" [value]="item._id">
+                  {{ newSale.itemModel === 'Inventory' ? item.name : item.customer + ' - ' + item.item }}
+              </option>
+          </select>
+      </div>
+
+      <div class="col-12 mb-3">
+          <label for="category" class="form-label">Categoría</label>
+          <input type="text" class="form-control" id="category" name="category" [value]="selectedCategoryName || ''"
+              readonly />
+      </div>
+
+      <div class="col-md-6 mb-3">
+          <label for="saleDate" class="form-label">Fecha de venta</label>
+          <input type="date" class="form-control" id="saleDate" name="saleDate" [(ngModel)]="newSale.saleDate"
+              required />
+      </div>
+
+      <!--
+      <div class="col-md-6 mb-3">
+          <label for="month" class="form-label">Mes</label>
+          <input type="text" class="form-control" id="month" name="month" [(ngModel)]="newSale.month"
+              placeholder="Ingresa el mes" required />
+      </div>
+      -->
+
+      <div class="col-md-6 mb-3">
+          <label for="unitCost" class="form-label">Costo Unitario</label>
+          <input type="number" class="form-control" id="unitCost" name="unitCost" [(ngModel)]="newSale.unitCost"
+              (input)="calculateTotals()" placeholder="Costo Unitario" required />
+      </div>
+
+      <div class="col-md-6 mb-3">
+          <label for="quantity" class="form-label">Cantidad</label>
+          <input type="number" class="form-control" id="quantity" name="quantity" [(ngModel)]="newSale.quantity"
+              (input)="calculateTotals()" placeholder="Cantidad" required />
+      </div>
+
+      <div class="col-md-4 mb-3">
+          <label for="salePrice" class="form-label">Precio de Venta</label>
+          <input type="number" class="form-control" id="salePrice" name="salePrice" [(ngModel)]="newSale.salePrice"
+              (input)="calculateTotals()" placeholder="Precio de Venta" required />
+      </div>
+
+      <div class="col-md-6 mb-3">
+          <label for="totalSale" class="form-label">Venta Total</label>
+          <input type="number" class="form-control" id="totalSale" name="totalSale" [(ngModel)]="newSale.totalSale"
+              [readonly]="true" />
+      </div>
+
+      <div class="col-md-6 mb-3">
+          <label for="profitPercentage" class="form-label">% Ganancia</label>
+          <input type="number" class="form-control" id="profitPercentage" name="profitPercentage"
+              [(ngModel)]="newSale.profitPercentage" [readonly]="true" />
+      </div>
+
+      <div class="col-12 text-end">
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+              {{ newSale._id ? 'Actualizar Venta' : 'Guardar Venta' }}
+          </button>
+      </div>
+  </form>
+</div>

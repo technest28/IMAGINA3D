@@ -5,12 +5,13 @@ import { ExpenseService } from '../../services/expense.service';
 import Swal from 'sweetalert2';
 import { Day } from '../../interfaces/day';
 import { Expense } from '../../interfaces/expense';
+import { NgFor, NgIf } from '@angular/common';
 
 
 
 @Component({
   selector: 'app-form-gastos',
-  imports: [ FormsModule ],
+  imports: [ FormsModule, NgIf, NgFor ],
   templateUrl: './form-gastos.component.html',
   styleUrl: './form-gastos.component.css'
 })

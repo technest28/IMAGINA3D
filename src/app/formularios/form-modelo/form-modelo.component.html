@@ -1,1 +1,44 @@
-<p>form-modelo works!</p>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Formulario de Modelo</h2>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+  </div>
+  <form class="row" (submit)="onSubmit($event)">
+
+
+    <div class="col-md-6 mb-3">
+      <label for="InventarioInicial" class="form-label">Inventario Inicial</label>
+      <input type="number" class="form-control" id="InventarioInicial" name="InventarioInicial" min="0"
+        placeholder="Ingresa el inventario inicial" required>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label for="PedidoRealizado" class="form-label">Pedido Realizado</label>
+      <input type="number" class="form-control" id="PedidoRealizado" name="PedidoRealizado" min="0"
+        placeholder="Ingresa el pedido realizado" required>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label for="Mes" class="form-label">Mes</label>
+      <input type="number" class="form-control" id="Mes" name="Mes" min="1" max="12" placeholder="Ingresa el mes"
+        required>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label for="Año" class="form-label">Año</label>
+      <input type="number" class="form-control" id="Año" name="Año" min="2021" placeholder="Ingresa el año" required>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label for="Demanda" class="form-label">Demanda</label>
+      <input type="number" class="form-control" id="Demanda" name="Demanda" min="0" placeholder="Ingresa la demanda"
+        required>
+    </div>
+
+    <div class="col-12 text-end">
+      <button type="submit" class="btn btn-primary" style="width: 100%;">
+        Hacer predicción
+      </button>
+    </div>
+  </form>
+</div>

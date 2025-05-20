@@ -1,0 +1,204 @@
+.table-users {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 10px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.table-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+  margin: 0;
+}
+
+.add-user-button button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.add-user-button button:hover {
+  background-color: #45a049;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead {
+  background: #3f76ca;
+  color: #fff;
+}
+
+th,
+td {
+  padding: 15px;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f7f7f7;
+}
+
+td b {
+  font-weight: bold;
+}
+
+.btn-info,
+.btn-danger {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.btn-info {
+  color: #4caf50;
+}
+
+.btn-info:hover {
+  color: #388e3c;
+}
+
+.btn-danger {
+  color: #e53935;
+}
+
+.btn-danger:hover {
+  color: #b71c1c;
+}
+
+/* Responsivo para la tabla */
+@media (max-width: 860px) {
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  table {
+    background-color: transparent;
+  }
+
+  thead tr {
+    display: none;
+  }
+
+  tbody tr {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #fff;
+  }
+
+  td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    padding: 10px;
+    border: none;
+    font-size: 14px;
+    word-wrap: break-word;
+  }
+
+  td:before {
+    content: attr(data-label);
+    flex: 0 0 35%;
+    font-weight: bold;
+    text-align: left;
+    color: #555;
+  }
+
+  td:last-child {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+}
+
+
+app-form-gastos {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto; /* Scroll vertical */
+  max-height: 100vh; /* Altura maxima */
+}
+
+/* Fondo al abrir el modal */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+
+
+/*Paginacion */
+.pagination {
+margin-top: 20px;
+text-align: center;
+display: flex;
+justify-content: flex-end;
+}
+
+.pagination button {
+background-color: #3f76ca;
+color: white;
+border: none;
+padding: 8px 12px;
+margin: 0 3px;
+border-radius: 4px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+.pagination button:hover:not([disabled]) {
+background-color: #325ba8;
+}
+
+.pagination button[disabled] {
+background-color: #ccc;
+cursor: default;
+}
+
+.pagination button.active {
+background-color: #4caf50;
+}
+
+

@@ -1,1 +1,67 @@
-<p>egresos works!</p>
+<div class="table-users">
+  <div class="header-actions">
+    <div class="table-title">Monitoreo de egresos</div>
+    <div class="add-user-button">
+      <button (click)="openCreateModal()">
+        <i class="fas fa-plus"></i> Agregar egreso
+      </button>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Cliente</th>
+        <th>Artículo</th>
+        <th>Fecha</th>
+
+        <th>Costo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr *ngFor="let expense of paginatedExpenses; let i = index">
+        <td data-label="#">
+          {{ (currentPage - 1) * itemsPerPage + i + 1 }}
+        </td>
+        <td data-label="Cliente">{{ expense.customer }}</td>
+        <td data-label="Artículo">{{ expense.item }}</td>
+        <td data-label="Fecha">{{ expense.date | date: 'dd/MM/yyyy' : 'UTC' }}</td>
+
+        <td data-label="Costo">{{ expense.cost | currency }}</td>
+        <td data-label="Acciones">
+          <button class="btn-info" title="Editar" (click)="editExpense(expense)">
+            <i class="fas fa-pen"></i>
+          </button>
+          <button class="btn-danger" title="Eliminar" (click)="deleteExpense(expense._id)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredExpenses.length === 0">
+        <td colspan="7">No hay egresos disponibles.</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <button (click)="goToPage(i + 1)" [class.active]="currentPage === (i + 1)">
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
+</div>
+
+<div *ngIf="showCreateModal" class="backdrop"></div>
+<app-form-gastos
+  *ngIf="showCreateModal"
+  class="col-12 col-md-8 col-lg-6"
+  (close)="closeCreateModal()"
+  [selectedExpense]="selectedExpense">
+</app-form-gastos>

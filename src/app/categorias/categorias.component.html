@@ -1,1 +1,51 @@
-<p>categorias works!</p>
+<div class="table-users">
+  <div class="header-actions">
+    <div class="table-title">Monitoreo de categorías</div>
+    <div class="add-user-button">
+      <button (click)="openCreateModal()">
+        <i class="fas fa-plus"></i> Agregar categoría
+      </button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let categoria of paginatedCategories">
+        <td data-label="Nombre">{{ categoria.name }}</td>
+        <td data-label="Descripción">{{ categoria.description }}</td>
+        <td data-label="Acciones">
+          <button class="btn-info" title="Editar" (click)="updateCategory(categoria)">
+            <i class="fas fa-pen"></i>
+          </button>
+          <button class="btn-danger" title="Eliminar" (click)="deleteCategory(categoria._id!)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <button (click)="goToPage(i + 1)" [class.active]="currentPage === (i + 1)">
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
+</div>
+
+<div *ngIf="showCreateModal" class="backdrop"></div>
+<app-form-categorias *ngIf="showCreateModal" class="col-12 col-md-8 col-lg-6" (close)="closeCreateModal()"
+  [selectedCategory]="selectedCategory">
+</app-form-categorias>

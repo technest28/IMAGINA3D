@@ -1,1 +1,117 @@
-<p>form-pedidos works!</p>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Formulario de Pedidos</h2>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+  </div>
+  <form class="row" (submit)="saveOrder()">
+    <div class="col-12 mb-3">
+      <label for="customer" class="form-label">Cliente</label>
+      <input type="text" class="form-control" id="customer" name="customer" [(ngModel)]="newOrder.customer"
+        placeholder="Ingresa el nombre del cliente" required />
+    </div>
+
+    <div class="col-12 mb-3">
+      <label for="item" class="form-label">Artículo</label>
+      <input type="text" class="form-control" id="item" name="item" [(ngModel)]="newOrder.item"
+        placeholder="Ingresa el artículo" required />
+    </div>
+
+    <div class="col-12 mb-3">
+      <label for="category" class="form-label">Categoría</label>
+      <select class="form-control" id="category" name="category" [(ngModel)]="newOrder.category"
+        [compareWith]="compareCategories" required>
+        <option *ngFor="let category of categories" [ngValue]="category">{{ category.name }}</option>
+      </select>
+
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label for="orderDate" class="form-label">Fecha de Pedido</label>
+      <input type="date" class="form-control" id="orderDate" name="orderDate" [(ngModel)]="newOrder.orderDate"
+        required />
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label for="deliveryDate" class="form-label">Fecha de Entrega</label>
+      <input type="date" class="form-control" id="deliveryDate" name="deliveryDate" [(ngModel)]="newOrder.deliveryDate"
+        required />
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="quantity" class="form-label">Cantidad</label>
+      <input type="number" class="form-control" id="quantity" name="quantity" [(ngModel)]="newOrder.quantity" min="0"
+        placeholder="Ingresa la cantidad" required (input)="updateTotalUnitCost(); updateTotalSale()" />
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="cost" class="form-label">Costo unitario</label>
+      <input type="number" class="form-control" id="cost" name="cost" [(ngModel)]="newOrder.cost" min="0"
+        placeholder="Ingresa el costo" (input)="updateTotalUnitCost()" />
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="salePrice" class="form-label">Precio de Venta</label>
+      <input type="number" class="form-control" id="salePrice" name="salePrice" [(ngModel)]="newOrder.salePrice" min="0"
+        placeholder="Ingresa el precio de venta" required (input)="updateTotalSale()" />
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="deposit" class="form-label">Anticipo</label>
+      <input type="number" class="form-control" id="deposit" name="deposit" min="0" placeholder="Ingresa el anticipo"
+        [(ngModel)]="newOrder.deposit" (input)="updateRemainingPayment()" />
+    </div>
+
+
+    <div class="col-md-4 mb-3">
+      <label for="extras-unity" class="form-label">Extras unitarios (Opcional)</label>
+      <input type="number" class="form-control" id="extras-unity" name="extras-unity" min="0" placeholder="Ingresa algún extra"
+        [(ngModel)]="newOrder.extrasUnity" (input)="updateTotalSale()" />
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="extras-sale" class="form-label">Extras ventas (Opcional)</label>
+      <input type="number" class="form-control" id="extras-sale" name="extras-sale" min="0" placeholder="Ingresa algún extra"
+        [(ngModel)]="newOrder.extrasSale" (input)="updateTotalSale()" />
+    </div>
+
+
+    <div class="col-md-12 mb-3">
+      <label for="info-extra" class="form-label">Información de extras (Opcional)</label>
+      <textarea class="form-control" id="info-extra" name="info-extra" rows="3"
+        placeholder="Ingresa información adicional" [(ngModel)]="newOrder.infoExtra"></textarea>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="totalUnitCost" class="form-label">Costo Total Unitario</label>
+      <input type="number" class="form-control" id="totalUnitCost" name="totalUnitCost"
+        [(ngModel)]="newOrder.totalUnitCost" placeholder="Ingresa el costo total unitario" readonly />
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="totalSale" class="form-label">Total de precio de venta</label>
+      <input type="number" class="form-control" id="totalSale" name="totalSale" [(ngModel)]="newOrder.totalSale" min="0"
+        placeholder="Ingresa la venta total" required readonly />
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="remainingPayment" class="form-label">Resta por pagar</label>
+      <input type="number" class="form-control" id="remainingPayment" name="remainingPayment"
+        [(ngModel)]="newOrder.remainingAmount" placeholder="Resta por pagar" readonly />
+    </div>
+
+    <div class="col-12 mb-3">
+      <label for="status" class="form-label">Estado</label>
+      <select class="form-control" id="status" name="status" [(ngModel)]="newOrder.status" required>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Terminado">Terminado</option>
+        <option value="Entregado/Pagado">Entregado/Pagado</option>
+      </select>
+    </div>
+
+    <div class="col-12 text-end">
+      <button type="submit" class="btn btn-primary" style="width: 100%">
+        {{ newOrder._id ? "Actualizar Pedido" : "Guardar Pedido" }}
+      </button>
+    </div>
+  </form>
+</div>

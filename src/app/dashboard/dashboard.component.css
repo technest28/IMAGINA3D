@@ -1,0 +1,143 @@
+body {
+  background-color: #eff3fb;
+}
+
+nav {
+  background-color: #243f5f;
+
+  padding-bottom: 0 !important;
+  margin-bottom: 0.5rem;
+}
+.sidebar {
+  background-color: #243f5f;
+  color: white;
+  height: 85vh;
+  width: 16%;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-left: 10px;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  overflow-y: auto;
+}
+.text-user {
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .col-md-2 {
+    flex: 0 0 auto;
+    /* width: 16.66666667%; */
+    width: 16%;
+  }
+  .col-md-10 {
+    width: 82%;
+  }
+}
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-brand {
+  color: white;
+  font-weight: bold;
+  padding-left: 70px;
+}
+
+.badge {
+  font-size: 0.75rem;
+}
+
+.card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.card-header {
+  font-weight: bold;
+}
+
+.generate-report {
+  float: right;
+}
+
+.nav-item {
+  margin-bottom: 1rem;
+}
+
+.nav-item:last-child {
+  margin-bottom: 0;
+}
+
+.nav-item a.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: left;
+  padding: 0.5rem;
+}
+.nav-item a.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.nav-item a.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.nav-item a.nav-link i {
+  width: 1.5rem;
+  text-align: center;
+}
+
+.sidebar {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.navbar-toggler-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fas.fa-bars {
+  font-size: 1.5rem;
+}
+
+@media (max-width: 1204px) and (min-width: 770px) {
+  .nav-item a.nav-link {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 767px) {
+  .navbar-toggler {
+    display: none !important;
+  }
+}
+@media (max-width: 765px) {
+  .sidebar {
+    height: 500px;
+  }
+}
+
+@media (max-width: 769px) {
+  .sidebar {
+    margin-left: 0;
+    border-radius: 0 0 10px 10px;
+    position: static;
+    width: 100%;
+    margin-left: 0;
+    border-radius: 0;
+    overflow-y: visible;
+    z-index: 1111;
+  }
+  nav {
+    margin-bottom: 0;
+  }
+  .sidebar-title {
+    display: none;
+  }
+}

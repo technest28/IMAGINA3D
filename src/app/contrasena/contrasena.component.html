@@ -1,1 +1,40 @@
-<p>contrasena works!</p>
+<app-nav></app-nav>
+
+<div class="hero">
+    <div class="recover-password-container d-flex align-items-center justify-content-center">
+        <div class="recover-password-box">
+            <h2 class="text-center">Recuperar Contraseña</h2>
+            <p class="text-center text-muted">
+                Ingresa tu correo electrónico para recibir instrucciones sobre cómo restablecer tu contraseña.
+            </p>
+
+
+            <form *ngIf="!emailValidated" (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input type="email" id="email" class="form-control" name="email" required
+                        placeholder="Introduce tu correo" [(ngModel)]="email" />
+                </div>
+                <button type="submit" class="btn btn-primary w-100" [disabled]="!email">
+                    Enviar
+                </button>
+            </form>
+
+
+            <form *ngIf="emailValidated" (ngSubmit)="onUpdatePassword()">
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">Nueva Contraseña</label>
+                    <input type="password" id="newPassword" class="form-control" name="newPassword" required
+                        placeholder="Introduce tu nueva contraseña" [(ngModel)]="newPassword" />
+                </div>
+                <button type="submit" class="btn btn-success w-100" [disabled]="!newPassword">
+                    Actualizar Contraseña
+                </button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a routerLink="/login" class="text-muted">Regresar al inicio de sesión</a>
+            </div>
+        </div>
+    </div>
+</div>

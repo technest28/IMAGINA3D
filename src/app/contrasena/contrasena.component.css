@@ -1,0 +1,43 @@
+.hero {
+  background-image: url("https://picsum.photos/id/1018/1920/1080");
+}
+
+.recover-password-container {
+  height: 100vh;
+
+}
+
+.recover-password-box {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  color: #6c757d;
+}
+
+button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+a {
+  text-decoration: none;
+  color: #1abc9c;
+}
+
+a:hover {
+  text-decoration: underline;
+}

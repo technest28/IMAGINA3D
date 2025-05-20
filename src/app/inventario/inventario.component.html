@@ -1,1 +1,70 @@
-<p>inventario works!</p>
+<div class="table-users">
+  <div class="header-actions">
+    <div class="table-title">Monitoreo de inventario</div>
+    <div class="add-user-button">
+      <button (click)="addInventory()">
+        <i class="fas fa-plus"></i> Agregar producto
+      </button>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nombre del producto</th>
+        <th>Categoría</th>
+        <th>Cantidad</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr *ngFor="let inventory of paginatedInventories; let i = index">
+        <td data-label="#">
+          {{ (currentPage - 1) * itemsPerPage + i + 1 }}
+        </td>
+        <td data-label="Nombre del Producto">{{ inventory.name }}</td>
+        <td data-label="Categoría">{{ inventory.category }}</td>
+        <td data-label="Cantidad">{{ inventory.quantity }}</td>
+        <td data-label="Estado">
+          <span class="badge rounded-pill" [ngClass]="{
+              'bg-success': inventory.quantity > 10,
+              'bg-warning': inventory.quantity <= 10 && inventory.quantity > 5,
+              'bg-danger': inventory.quantity <= 5
+            }">
+            {{ inventory.quantity > 10 ? 'Suficiente' : inventory.quantity > 5 ? 'Bajo' : 'Crítico' }}
+          </span>
+        </td>
+        <td data-label="Acciones">
+          <button class="btn-info" title="Editar" (click)="updateInventory(inventory)">
+            <i class="fas fa-pen"></i>
+          </button>
+          <button class="btn-danger" title="Eliminar" (click)="deleteInventory(inventory._id)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredInventories.length === 0">
+        <td colspan="6" class="no-data">No hay inventarios disponibles.</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <button (click)="goToPage(i + 1)" [class.active]="currentPage === (i + 1)">
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
+</div>
+
+<div *ngIf="showCreateInventoryModal" class="backdrop"></div>
+<app-form-inventario *ngIf="showCreateInventoryModal" class="col-12 col-md-8 col-lg-6"
+  [selectedInventory]="selectedInventory" (close)="closeCreateInventoryModal()">
+</app-form-inventario>

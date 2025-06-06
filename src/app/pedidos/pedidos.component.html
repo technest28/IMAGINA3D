@@ -1,1 +1,112 @@
-<p>pedidos works!</p>
+<div class="table-users">
+  <div class="header-actions">
+    <div class="table-title">Monitoreo de pedidos</div>
+    <div class="add-user-button">
+      <button (click)="addOrder()">
+        <i class="fas fa-plus"></i> Agregar pedido
+      </button>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th (click)="sortBy('customer')" style="cursor: pointer;">
+          Cliente
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'customer' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'customer' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <th>Artículo</th>
+        <th (click)="sortBy('orderDate')" style="cursor: pointer;">
+          Fecha de pedido
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'orderDate' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'orderDate' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <th (click)="sortBy('quantity')" style="cursor: pointer;">
+          Cantidad
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'quantity' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'quantity' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <th>Precio de Venta</th>
+        <th>Anticipo</th>
+        <th (click)="sortBy('totalSale')" style="cursor: pointer;">
+          Venta Total
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'totalSale' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'totalSale' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <th>Resta</th>
+        <th (click)="sortBy('status')" style="cursor: pointer;">
+          Estado
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'status' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'status' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <th (click)="sortBy('deliveryDate')" style="cursor: pointer;">
+          Fecha de entrega
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'deliveryDate' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'deliveryDate' && sortOrder === 'desc'
+          }"></i>
+        </th>
+
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let order of paginatedOrders; let i = index">
+        <td data-label="#">
+          {{ (currentPage - 1) * itemsPerPage + i + 1 }}
+        </td>
+        <td data-label="Cliente">{{ order.customer }}</td>
+        <td data-label="Artículo">{{ order.item }}</td>
+        <td data-label="Fecha de pedido">{{ order.orderDate | date: 'dd/MM/yyyy' :'UTC' }}</td>
+        <td data-label="Cantidad">{{ order.quantity }}</td>
+        <td data-label="Precio de Venta">{{ order.salePrice | currency }}</td>
+        <td data-label="Anticipo">{{ order.deposit | currency }}</td>
+        <td data-label="Venta Total">{{ order.totalSale | currency }}</td>
+        <td data-label="Resta">{{ (order.totalSale - order.deposit) | currency }}</td>
+        <td data-label="Estado">{{ order.status }}</td>
+        <td data-label="Fecha de entrega">{{ order.deliveryDate | date: 'dd/MM/yyyy' : 'UTC' }}</td>
+        <td data-label="Acciones">
+          <button class="btn-info" title="Editar" (click)="updateOrder(order)">
+            <i class="fas fa-pen"></i>
+          </button>
+          <button class="btn-danger" title="Eliminar" (click)="deleteOrder(order._id)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredOrders.length === 0">
+        <td colspan="12">No hay pedidos disponibles.</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <button (click)="goToPage(i + 1)" [class.active]="currentPage === (i + 1)">
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
+</div>
+
+<div *ngIf="showCreateOrderModal" class="backdrop"></div>
+<app-form-pedidos *ngIf="showCreateOrderModal" class="col-12 col-md-8 col-lg-6" [selectedOrder]="selectedOrder"
+  (close)="closeCreateOrderModal()">
+</app-form-pedidos>

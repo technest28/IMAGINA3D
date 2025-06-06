@@ -1,1 +1,102 @@
-<p>ventas works!</p>
+<div class="table-users">
+  <div class="header-actions">
+    <div class="table-title">Monitoreo de ventas</div>
+    <div class="add-user-button">
+      <button (click)="openCreateSaleModal()">
+        <i class="fas fa-plus"></i> Agregar venta
+      </button>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <!-- Ordenar por artículo -->
+        <th (click)="sortBy('itemName')" style="cursor: pointer;">
+          Artículo
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'itemName' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'itemName' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <!-- Ordenar por fecha de venta -->
+        <th (click)="sortBy('saleDate')" style="cursor: pointer;">
+          Fecha de venta
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'saleDate' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'saleDate' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <!-- <th>Mes</th> Comentado porque no es necesario -->
+        <th>Costo Unitario</th>
+        <th>Cantidad</th>
+        <th>Precio de Venta</th>
+        <!-- Ordenar por venta total -->
+        <th (click)="sortBy('totalSale')" style="cursor: pointer;">
+          Venta Total
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'totalSale' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'totalSale' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <th>% Ganancia</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sale of filteredSales; let i = index">
+        <td data-label="#">{{ i + 1 }}</td>
+        <td data-label="Artículo">{{ sale.itemName }}</td>
+        <td data-label="Fecha venta">{{ sale.saleDate | date: 'dd/MM/yyyy' : 'UTC' }}</td>
+        <!-- <td data-label="Mes">{{ sale.month }}</td> Comentado porque no es necesario -->
+        <td data-label="Costo Unitario">{{ sale.unitCost | currency }}</td>
+        <td data-label="Cantidad">{{ sale.quantity }}</td>
+        <td data-label="Precio Venta">{{ sale.salePrice | currency }}</td>
+        <td data-label="Venta Total">{{ sale.totalSale | currency }}</td>
+        <td data-label="% Ganancia">{{ sale.profitPercentage }}%</td>
+        <td data-label="Acciones">
+          <button class="btn-info" title="Editar" (click)="updateSale(sale)">
+            <i class="fas fa-pen"></i>
+          </button>
+          <button class="btn-danger" title="Eliminar" (click)="deleteSale(sale._id)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredSales.length === 0">
+        <td colspan="10">No hay ventas disponibles.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <button (click)="goToPage(i + 1)" [class.active]="currentPage === (i + 1)">
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
+</div>
+
+<div>
+
+
+  <div class="chart-container">
+    <canvas id="ventasChart"></canvas>
+  </div>
+
+  <div class="chart-navigation">
+    <button (click)="previousYear()">Año Anterior</button>
+    <span>{{ selectedChartYear }}</span>
+    <button (click)="nextYear()">Año Siguiente</button>
+  </div>
+
+</div>
+
+
+
+<div *ngIf="showSaleModal" class="backdrop">
+  <app-form-ventas [selectedSale]="selectedSale" (close)="closeSaleModal()"></app-form-ventas>
+</div>

@@ -1,1 +1,104 @@
-<p>materiales works!</p>
+<div class="table-users">
+  <div class="header-actions">
+    <div class="table-title">Monitoreo de compras</div>
+    <div class="add-user-button">
+      <button (click)="openCreateUserModal()">
+        <i class="fas fa-plus"></i> Agregar material
+      </button>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th (click)="sortBy('name')" style="cursor: pointer;">
+          Nombre
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'name' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'name' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <th>Descripción</th>
+        <th (click)="sortBy('total')" style="cursor: pointer;">
+          Precio
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'total' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'total' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <th>Cantidad</th>
+        <th>Total</th>
+        <th (click)="sortBy('monthlyFee')" style="cursor: pointer;">
+          A meses
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'monthlyFee' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'monthlyFee' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <th (click)="sortBy('purchaseDate')" style="cursor: pointer;">
+          Fecha de Compra
+          <i class="fa-solid" [ngClass]="{
+            'fa-sort-up': sortedColumn === 'purchaseDate' && sortOrder === 'asc',
+            'fa-sort-down': sortedColumn === 'purchaseDate' && sortOrder === 'desc'
+          }"></i>
+        </th>
+        <th>Proveedor</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr *ngFor="let material of paginatedMaterials; let i = index">
+        <td data-label="#">
+          {{ (currentPage - 1) * itemsPerPage + i + 1 }}
+        </td>
+        <td data-label="Nombre">{{ material.name }}</td>
+        <td data-label="Descripción">{{ material.description }}</td>
+        <td data-label="Precio">{{ material.price | currency }}</td>
+        <td data-label="Cantidad">{{ material.quantity }}</td>
+        <td data-label="Total">{{ material.total | currency }}</td>
+        <td data-label="A meses">{{ material.monthlyFee ? 'Sí' : 'No' }}</td>
+        <td data-label="Fecha de Compra">{{ material.purchaseDate | date: 'dd/MM/yyyy':'UTC' }}</td>
+        <td data-label="Proveedor">{{ material.supplier || 'N/A' }}</td>
+        <td data-label="Acciones">
+          <button class="btn-info" title="Actualizar" (click)="updateMaterial(material)">
+            <i class="fas fa-pen"></i>
+          </button>
+          <button class="btn-danger" title="Eliminar" (click)="deleteMaterial(material._id)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredMaterials.length === 0">
+        <td colspan="9" class="no-data">No hay materiales disponibles.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <button (click)="goToPage(i + 1)" [class.active]="currentPage === (i + 1)">
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
+</div>
+
+<div>
+  <div class="chart-container">
+    <canvas id="comprasChart"></canvas>
+  </div>
+  <div class="chart-navigation">
+    <button (click)="previousYear()">Año Anterior</button>
+    <span>{{ selectedChartYear }}</span>
+    <button (click)="nextYear()">Año Siguiente</button>
+  </div>
+</div>
+
+<div *ngIf="showCreateUserModal" class="backdrop"></div>
+<app-form-materiales *ngIf="showCreateUserModal" class="col-12 col-md-8 col-lg-6" (close)="closeCreateUserModal()"
+  [selectedMaterial]="selectedMaterial">
+</app-form-materiales>

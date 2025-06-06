@@ -1,4 +1,4 @@
 .hero{
-  background-image: url("assets/blue-laser.jpg");
+  background-image: url("/public/assets/blue-laser.jpg");
   background-size: cover;
 }

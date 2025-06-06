@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode'; // Corrige la importación de jwtDecode
 import { environment } from '../../environments/environment'; // Corrige la ruta de environment
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AutenticationService {
   private apiUrl = environment.apiUrl; // Usa la URL del entorno
   private currentUserSubject: BehaviorSubject<any>;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {
     this.currentUserSubject = new BehaviorSubject<any>(this.loadCurrentUser());
   }
 
@@ -27,18 +28,22 @@ export class AutenticationService {
   }
 
   saveToken(token: string): void {
-    localStorage.setItem('token', token);
-    const decodedUser = jwtDecode(token) as any; // Decodifica el token
-    this.currentUserSubject.next(decodedUser); // Actualiza el BehaviorSubject
-    localStorage.setItem('role', decodedUser.role); // Guarda el rol del usuario
-    localStorage.setItem('name', decodedUser.name); // Guarda el nombre
-    localStorage.setItem('email', decodedUser.email); // Guarda el email
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('token', token);
+      const decodedUser = jwtDecode(token) as any; // Decodifica el token
+      this.currentUserSubject.next(decodedUser); // Actualiza el BehaviorSubject
+      localStorage.setItem('role', decodedUser.role); // Guarda el rol del usuario
+      localStorage.setItem('name', decodedUser.name); // Guarda el nombre
+      localStorage.setItem('email', decodedUser.email); // Guarda el email
+    }
   }
 
   private loadCurrentUser(): any {
-    const token = this.getToken();
-    if (token) {
-      return jwtDecode(token); // Decodifica el token
+    if (isPlatformBrowser(this.platformId)) {
+      const token = this.getToken();
+      if (token) {
+        return jwtDecode(token); // Decodifica el token
+      }
     }
     return null;
   }
@@ -48,11 +53,17 @@ export class AutenticationService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
   getRole(): string | null {
-    return localStorage.getItem('role');
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('role');
+    }
+    return null;
   }
 
   isAuthenticated(): boolean {
@@ -74,10 +85,12 @@ export class AutenticationService {
   }
 
   clearSession(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    localStorage.removeItem('name');
-    localStorage.removeItem('email');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      localStorage.removeItem('name');
+      localStorage.removeItem('email');
+    }
     this.currentUserSubject.next(null);
   }
 

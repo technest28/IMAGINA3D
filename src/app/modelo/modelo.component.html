@@ -1,1 +1,34 @@
-<p>modelo works!</p>
+<div class="table-users">
+  <div class="header-actions">
+    <div class="table-title">Monitoreo de modelo</div>
+    <div class="add-user-button">
+      <button (click)="openCreateUserModal()">
+        <i class="fas fa-plus"></i> Hacer predicción
+      </button>
+    </div>
+  </div>
+
+  <div class="alert alert-info" role="alert">
+    Las recomendaciones del modelo de predicción son únicamente recomendaciones en base a su entrenamiento y sus conocimientos, por lo que puede estar sujeto a cometer errores. El usuario tiene la opción final en cuanto al uso de la información proporcionada por el modelo de predicción.
+  </div>
+
+  <div style="max-width: 100%; margin: auto;">
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <button (click)="goToPage(i + 1)" [class.active]="currentPage === (i + 1)">
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
+
+  <div *ngIf="showCreateUserModal" class="backdrop"></div>
+  <app-form-modelo *ngIf="showCreateUserModal" class="col-12 col-md-8 col-lg-6" (close)="closeCreateUserModal()"
+    [selectedMaterial]="selectedMaterial">
+  </app-form-modelo>
+
+</div>

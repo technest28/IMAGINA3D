@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration=production && cp dist/imagina3-d/browser/index.csr.html dist/imagina3-d/browser/index.html",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:IMAGINA3D": "node dist/imagina3-d/server/server.mjs"

@@ -1,1 +1,52 @@
-<p>registro works!</p>
+<app-nav></app-nav>
+
+<div class="hero">
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-lg-6 col-md-8 col-sm-10 bg-white p-4 rounded shadow">
+      <h1 class="text-center mb-4 title"><span class="italic-bold">Regist</span>ro</h1>
+
+      <form (submit)="registerUser()">
+        <div class="row g-2">
+          <div class="col-md-6">
+            <label for="first-name" class="form-label">Nombre</label>
+            <input type="text" id="first-name" name="first-name" class="form-control" placeholder="Nombre"
+              [(ngModel)]="usuario.name" required>
+          </div>
+
+          <div class="col-md-6">
+            <label for="lastname-father" class="form-label">Apellido Paterno</label>
+            <input type="text" id="lastname-father" name="lastname-father" class="form-control"
+              placeholder="Apellido Paterno" [(ngModel)]="usuario.lastnameFather" required>
+          </div>
+        </div>
+
+        <div class="row g-2">
+          <div class="col-md-6">
+            <label for="lastname-mother" class="form-label">Apellido Materno</label>
+            <input type="text" id="lastname-mother" name="lastname-mother" class="form-control"
+              placeholder="Apellido Materno" [(ngModel)]="usuario.lastnameMother" required>
+          </div>
+
+          <div class="col-md-6">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Correo electrónico"
+              [(ngModel)]="usuario.email" required>
+          </div>
+        </div>
+
+        <div class="mb-3 position-relative">
+          <label for="password" class="form-label">Contraseña</label>
+          <input [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="usuario.password" name="password"
+            class="form-control" placeholder="Introduce tu contraseña" required />
+          <button type="button" class="btn btn-link position-absolute end-0  translate-middle-y" style="top: 52px;"
+            (click)="togglePasswordVisibility()">
+            <i [ngClass]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </button>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100 mt-4">Registrarse</button>
+      </form>
+      <button class="btn btn-primary w-100 mt-4" routerLink="/login">Regresar al Login</button>
+    </div>
+  </div>
+</div>

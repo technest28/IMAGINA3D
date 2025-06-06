@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, AfterViewInit, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Material } from '../interfaces/material';
 import { MaterialService } from '../services/material.service';
 import Swal from 'sweetalert2';
@@ -34,7 +34,10 @@ export class MaterialesComponent implements OnInit, AfterViewInit {
   monthlyTotals: { month: string; total: number }[] = []; // Totales agrupados por mes
   selectedChartYear: number = new Date().getFullYear(); // Año seleccionado para el gráfico
 
-  constructor(private materialService: MaterialService) {
+  constructor(
+    private materialService: MaterialService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     Chart.register(...registerables);
   }
 
@@ -96,7 +99,10 @@ export class MaterialesComponent implements OnInit, AfterViewInit {
   }
 
   createChart(): void {
-    const ctx = document.getElementById('comprasChart') as HTMLCanvasElement;
+    let ctx: HTMLCanvasElement | null = null;
+    if (isPlatformBrowser(this.platformId)) {
+      ctx = document.getElementById('comprasChart') as HTMLCanvasElement;
+    }
 
     if (!ctx) {
       console.error('No se encontró el elemento <canvas> con el ID "comprasChart".');
@@ -137,7 +143,10 @@ export class MaterialesComponent implements OnInit, AfterViewInit {
   }
 
   createChartForYear(): void {
-    const ctx = document.getElementById('comprasChart') as HTMLCanvasElement;
+    let ctx: HTMLCanvasElement | null = null;
+    if (isPlatformBrowser(this.platformId)) {
+      ctx = document.getElementById('comprasChart') as HTMLCanvasElement;
+    }
 
     if (!ctx) {
       console.error('No se encontró el elemento <canvas> con el ID "comprasChart".');
@@ -221,7 +230,7 @@ export class MaterialesComponent implements OnInit, AfterViewInit {
   updateMaterial(material: Material): void {
     this.selectedMaterial = { ...material }; // Clonar el material seleccionado
     this.showCreateUserModal = true;
-    document.body.style.overflow = 'hidden';
+    this.setBodyOverflowHidden();
   }
 
 
@@ -255,13 +264,25 @@ export class MaterialesComponent implements OnInit, AfterViewInit {
   openCreateUserModal(): void {
     this.selectedMaterial = null; // Asegurarse de que no haya material seleccionado
     this.showCreateUserModal = true;
-    document.body.style.overflow = 'hidden';
+    this.setBodyOverflowHidden();
   }
 
   closeCreateUserModal(): void {
     this.showCreateUserModal = false;
     this.loadMaterials();
-    document.body.style.overflow = 'auto';
+    this.setBodyOverflowAuto();
+  }
+
+  setBodyOverflowHidden() {
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  setBodyOverflowAuto() {
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'auto';
+    }
   }
 
   sortBy(column: string): void {

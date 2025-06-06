@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { SaleService } from '../services/sale.service';
 import Swal from 'sweetalert2';
 import { Sale } from '../interfaces/sale';
@@ -7,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { InventoryService } from '../services/inventory.service';
 import { OrderService } from '../services/order.service';
 import { Chart, registerables } from 'chart.js';
-import { CurrencyPipe, DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { CurrencyPipe, DatePipe, NgClass, NgFor, NgIf, isPlatformBrowser } from '@angular/common';
 import { FormVentasComponent } from '../formularios/form-ventas/form-ventas.component';
 
 
@@ -51,7 +50,8 @@ export class VentasComponent implements OnInit, OnDestroy {
   constructor(
     private saleService: SaleService,
     private inventoryService: InventoryService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     Chart.register(...registerables); // Registrar todos los componentes de Chart.js
   }
@@ -132,13 +132,13 @@ export class VentasComponent implements OnInit, OnDestroy {
   createSale(sale: Sale): void {
     this.selectedSale = { ...sale };
     this.showSaleModal = true;
-    document.body.style.overflow = 'hidden';
+    this.setBodyOverflowHidden();
   }
 
   updateSale(sale: Sale): void {
     this.selectedSale = { ...sale }; // Clonar la venta seleccionada
     this.showSaleModal = true;
-    document.body.style.overflow = 'hidden';
+    this.setBodyOverflowHidden();
   }
 
   deleteSale(id: string): void {
@@ -198,19 +198,19 @@ export class VentasComponent implements OnInit, OnDestroy {
   openCreateSaleModal(): void {
     this.selectedSale = null; // Limpiar selección previa
     this.showSaleModal = true;
-    document.body.style.overflow = 'hidden';
+    this.setBodyOverflowHidden();
   }
 
   openEditSaleModal(sale: Sale): void {
     this.selectedSale = { ...sale };
     this.showSaleModal = true;
-    document.body.style.overflow = 'hidden';
+    this.setBodyOverflowHidden();
   }
 
   closeSaleModal(): void {
     this.showSaleModal = false;
     this.loadSales(); // Recarga las ventas después de cerrar el modal
-    document.body.style.overflow = 'auto';
+    this.setBodyOverflowAuto();
   }
 
   // MÉTODOS DE PAGINACIÓN
@@ -272,7 +272,12 @@ export class VentasComponent implements OnInit, OnDestroy {
     }
 
     // Crear la gráfica mixta
-    const ctx = document.getElementById('ventasChart') as HTMLCanvasElement;
+    let ctx: HTMLCanvasElement | null = null;
+    if (isPlatformBrowser(this.platformId)) {
+      ctx = document.getElementById('ventasChart') as HTMLCanvasElement;
+    }
+    if (!ctx) return;
+
     this.chartInstance = new Chart(ctx, {
       data: {
         labels: labels,
@@ -342,5 +347,16 @@ export class VentasComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  private setBodyOverflowHidden() {
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'hidden';
+    }
+  }
+  private setBodyOverflowAuto() {
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'auto';
+    }
   }
 }

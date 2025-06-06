@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { AfterViewInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import Swal from 'sweetalert2';
 import { PredictionService } from '../services/prediction.service';
 import { NgFor, NgIf } from '@angular/common';
 import { FormModeloComponent } from '../formularios/form-modelo/form-modelo.component';
+import { isPlatformBrowser } from '@angular/common';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class ModeloComponent implements AfterViewInit {
   totalPages: number = 0;
   chartInstance: Chart | null = null;
 
-  constructor(private predictionService: PredictionService) {}
+  constructor(private predictionService: PredictionService, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngAfterViewInit() {
     // Registrar los componentes necesarios
@@ -71,7 +72,11 @@ export class ModeloComponent implements AfterViewInit {
   }
 
   createChart(labels: string[], demanda: number[], demandaSugerida: number[]) {
-    const ctx = document.getElementById('myChart') as HTMLCanvasElement;
+    let ctx: HTMLCanvasElement | null = null;
+    if (isPlatformBrowser(this.platformId)) {
+      ctx = document.getElementById('myChart') as HTMLCanvasElement;
+    }
+    if (!ctx) return;
 
     // Destruir la instancia del gráfico anterior si existe
     if (this.chartInstance) {
@@ -134,12 +139,15 @@ export class ModeloComponent implements AfterViewInit {
   openCreateUserModal(): void {
     this.selectedMaterial = null; // Asegurarse de que no haya material seleccionado
     this.showCreateUserModal = true;
-    document.body.style.overflow = 'hidden';
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   closeCreateUserModal(): void {
     this.showCreateUserModal = false;
-
-    document.body.style.overflow = 'auto';
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'auto';
+    }
   }
 }

@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { OnInit, OnDestroy } from '@angular/core';
-import { OrderService } from '../services/order.service';
-import Swal from 'sweetalert2';
-import { Order } from '../interfaces/order';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { CurrencyPipe, DatePipe, NgClass, NgFor, NgIf, isPlatformBrowser } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { CurrencyPipe, DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
+import Swal from 'sweetalert2';
+
+import { Order } from '../interfaces/order';
+import { OrderService } from '../services/order.service';
 import { FormPedidosComponent } from '../formularios/form-pedidos/form-pedidos.component';
 
 
@@ -32,7 +32,10 @@ export class PedidosComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private orderService: OrderService) { }
+  constructor(
+    private orderService: OrderService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   ngOnInit(): void {
     this.loadOrders();
@@ -107,13 +110,17 @@ export class PedidosComponent implements OnInit, OnDestroy {
   addOrder(): void {
     this.selectedOrder = null;
     this.showCreateOrderModal = true;
-    document.body.style.overflow = 'hidden';
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   updateOrder(order: Order): void {
     this.selectedOrder = { ...order }; // Clona el pedido seleccionado
     this.showCreateOrderModal = true;
-    document.body.style.overflow = 'hidden';
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   deleteOrder(id: string): void {
@@ -152,7 +159,9 @@ export class PedidosComponent implements OnInit, OnDestroy {
   closeCreateOrderModal(): void {
     this.showCreateOrderModal = false;
     this.loadOrders(); // Recargar la lista de pedidos
-    document.body.style.overflow = 'auto';
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'auto';
+    }
   }
 
   // Devuelve los pedidos de la página actual

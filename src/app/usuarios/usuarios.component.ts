@@ -1,10 +1,11 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, Inject, PLATFORM_ID } from '@angular/core';
 import { User } from '../interfaces/user';
 import { UserService } from '../services/user.service';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 import { FormUsuariosComponent } from '../formularios/form-usuarios/form-usuarios.component';
 import { NgFor, NgIf } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-usuarios',
@@ -29,7 +30,10 @@ export class UsuariosComponent {
   itemsPerPage: number = 8;
 
 
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   ngOnInit() {
     this.loadUsers();
@@ -80,14 +84,18 @@ export class UsuariosComponent {
   openCreateModal(): void {
     this.selectedUser = null;
     this.showCreateModal = true;
-    document.body.style.overflow = 'hidden';
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   updateUser(user: User): void {
 
     this.selectedUser = { ...user }; // Clonar el usuario seleccionado
     this.showCreateModal = true; // Mostrar el modal del formulario
-    document.body.style.overflow = 'hidden';
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   deleteUser(id: string): void {
@@ -124,7 +132,9 @@ export class UsuariosComponent {
   closeCreateModal(): void {
     this.showCreateModal = false;
     this.loadUsers(); // Recargar la lista de usuarios
-    document.body.style.overflow = 'auto';
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'auto';
+    }
   }
 
 

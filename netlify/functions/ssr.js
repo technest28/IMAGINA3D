@@ -1,12 +1,12 @@
 const { builder } = require('@netlify/functions');
 const express = require('express');
 const path = require('path');
-const { AppServerModule } = require('../server/main');
-const { renderModule } = require('@angular/platform-server');
 const fs = require('fs');
+const { renderModule } = require('@angular/platform-server');
 
 const app = express();
-const distFolder = path.join(__dirname, '../browser');
+const distFolder = path.join(__dirname, '../../dist/imagina3-d/browser');
+const serverBundlePath = path.join(__dirname, '../../dist/imagina3-d/server/main.server.mjs');
 const indexHtml = fs.readFileSync(path.join(distFolder, 'index.html'), 'utf-8');
 
 app.get('*.*', express.static(distFolder, {
@@ -15,6 +15,7 @@ app.get('*.*', express.static(distFolder, {
 
 app.get('*', async (req, res) => {
   try {
+    const { AppServerModule } = await import(serverBundlePath);
     const html = await renderModule(AppServerModule, {
       document: indexHtml,
       url: req.originalUrl

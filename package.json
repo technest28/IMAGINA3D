@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:IMAGINA3D": "node dist/imagina3-d/server/server.mjs",
-    "build:ssr": "ng build --configuration=production && ng run IMAGINA3D:server:production && cp -r dist/imagina3-d/server dist/imagina3-d/browser/ && cp -r dist/imagina3-d/server dist/imagina3-d/ && cp -r dist/imagina3-d/browser dist/imagina3-d/server/"
+    "build:ssr": "ng build --configuration=production && ng run IMAGINA3D:server:production && cp -r dist/imagina3-d/server dist/imagina3-d/browser/ && cp -r dist/imagina3-d/server dist/imagina3-d/"
   },
   "private": true,
   "dependencies": {

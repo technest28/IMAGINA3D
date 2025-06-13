@@ -29,8 +29,7 @@
     "sweetalert2": "^11.21.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0",
-    "@netlify/functions": "^1.0.0",
-    "@nguniversal/express-engine": "^16.2.0"
+    "@netlify/functions": "^1.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.6",

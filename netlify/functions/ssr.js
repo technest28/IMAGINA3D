@@ -1,41 +1,28 @@
 const { builder } = require('@netlify/functions');
-const { createServer } = require('http');
-const { AppServerModule } = require('./dist/imagina3-d/server/main');
-const { ngExpressEngine } = require('@nguniversal/express-engine');
 const express = require('express');
 const path = require('path');
+const { AppServerModule } = require('../server/main');
+const { renderModule } = require('@angular/platform-server');
+const fs = require('fs');
 
 const app = express();
 const distFolder = path.join(__dirname, '../browser');
-const indexHtml = 'index.html';
-
-app.engine('html', ngExpressEngine({
-  bootstrap: AppServerModule,
-}));
-
-app.set('view engine', 'html');
-app.set('views', distFolder);
+const indexHtml = fs.readFileSync(path.join(distFolder, 'index.html'), 'utf-8');
 
 app.get('*.*', express.static(distFolder, {
   maxAge: '1y'
 }));
 
-app.get('*', (req, res) => {
-  res.render(indexHtml, { req });
-});
-
-const handler = builder(async (event, context) => {
-  return new Promise((resolve, reject) => {
-    const server = createServer(app);
-    server.listen(0, () => {
-      const port = server.address().port;
-      app.handle(event, context, (err, result) => {
-        server.close();
-        if (err) reject(err);
-        else resolve(result);
-      });
+app.get('*', async (req, res) => {
+  try {
+    const html = await renderModule(AppServerModule, {
+      document: indexHtml,
+      url: req.originalUrl
     });
-  });
+    res.status(200).send(html);
+  } catch (err) {
+    res.status(500).send('Error rendering Angular Universal SSR: ' + err);
+  }
 });
 
-exports.handler = handler;
+exports.handler = builder(app);

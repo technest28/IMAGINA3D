@@ -1,17 +1,12 @@
-const { builder } = require('@netlify/functions');
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
-const { renderModule } = require('@angular/platform-server');
+import path from 'path';
+import fs from 'fs';
+import express from 'express';
+import { builder } from '@netlify/functions';
+
+const distFolder = path.resolve('./dist/imagina3-d/browser');
+const ssrBundlePath = path.resolve('./dist/imagina3-d/server/main.js');
 
 const app = express();
-const distFolder = path.join(__dirname, '../../dist/imagina3-d/browser');
-const serverBundlePath = path.join(__dirname, '../../dist/imagina3-d/server/main.server.mjs');
-const indexHtml = fs.readFileSync(path.join(distFolder, 'index.html'), 'utf-8');
-
-app.get('*.*', express.static(distFolder, {
-  maxAge: '1y'
-}));
 
 // Middleware para manejar redirecciones personalizadas desde _redirects
 const redirectsPath = path.join(distFolder, '_redirects');
@@ -24,9 +19,7 @@ if (fs.existsSync(redirectsPath)) {
   redirects.forEach(rule => {
     const [from, to, status] = rule.split(/\s+/);
     if (from && to) {
-      // Soporte para wildcards tipo Netlify (/*)
       if (from.includes('*')) {
-        // Convertir a RegExp: /blog/* => ^/blog/.*$
         const pattern = new RegExp('^' + from.replace(/\*/g, '.*') + '$');
         app.use((req, res, next) => {
           if (pattern.test(req.path)) {
@@ -36,7 +29,6 @@ if (fs.existsSync(redirectsPath)) {
           }
         });
       } else {
-        // Ruta literal
         app.use(from, (req, res, next) => {
           if (req.path === from) {
             res.redirect(Number(status) || 301, to);
@@ -49,17 +41,24 @@ if (fs.existsSync(redirectsPath)) {
   });
 }
 
+// Sirve archivos estáticos
+app.use(express.static(distFolder));
+
+// SSR handler principal
 app.get('*', async (req, res) => {
   try {
-    const { AppServerModule } = await import(serverBundlePath);
-    const html = await renderModule(AppServerModule, {
+    // Importa dinámicamente el bundle SSR
+    const { app: angularApp, renderModule } = await import(ssrBundlePath);
+    const indexHtml = fs.readFileSync(path.join(distFolder, 'index.html'), 'utf-8');
+    const html = await renderModule(angularApp, {
+      url: req.url,
       document: indexHtml,
-      url: req.originalUrl
     });
     res.status(200).send(html);
   } catch (err) {
-    res.status(500).send('Error rendering Angular Universal SSR: ' + err);
+    console.error('SSR error:', err);
+    res.status(500).send('SSR Error');
   }
 });
 
-exports.handler = builder(app);
+export const handler = builder(app);

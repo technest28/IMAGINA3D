@@ -47,21 +47,18 @@ app.use(express.static(distFolder));
 // SSR handler principal
 app.get('*', async (req, res) => {
   try {
-    // Importa dinámicamente el bundle SSR y renderModule
+    // Importa dinámicamente el bundle SSR (módulo raíz)
     const ssrModule = await import(ssrBundlePath);
-    // Intenta obtener el módulo raíz y renderModule de la forma más compatible
-    const angularApp = ssrModule.AppServerModule || ssrModule.app || ssrModule.default;
-    let renderModule;
-    try {
-      // Intenta importar renderModule desde el bundle SSR
-      renderModule = ssrModule.renderModule;
-    } catch {
-      // Si no está, impórtalo desde @angular/platform-server
-      ({ renderModule } = await import('@angular/platform-server'));
+    const angularApp = ssrModule.default;
+    if (!angularApp) {
+      console.error('SSR: No se pudo importar el módulo raíz (default) del bundle SSR');
+      return res.status(500).send('SSR Error: No se pudo importar el módulo raíz (default)');
     }
-    if (!angularApp || !renderModule) {
-      console.error('SSR: No se pudo importar el módulo raíz o renderModule');
-      return res.status(500).send('SSR Error: No se pudo importar el módulo raíz o renderModule');
+    // Importa renderModule desde @angular/platform-server
+    const { renderModule } = await import('@angular/platform-server');
+    if (!renderModule) {
+      console.error('SSR: No se pudo importar renderModule de @angular/platform-server');
+      return res.status(500).send('SSR Error: No se pudo importar renderModule');
     }
     const indexHtml = fs.readFileSync(path.join(distFolder, 'index.html'), 'utf-8');
     const html = await renderModule(angularApp, {
@@ -71,7 +68,9 @@ app.get('*', async (req, res) => {
     res.status(200).send(html);
   } catch (err) {
     console.error('SSR error:', err);
-    res.status(500).send('SSR Error');
+    if (!res.headersSent) {
+      res.status(500).send('SSR Error');
+    }
   }
 });
 

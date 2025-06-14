@@ -13,6 +13,24 @@ app.get('*.*', express.static(distFolder, {
   maxAge: '1y'
 }));
 
+// Middleware para manejar redirecciones personalizadas desde _redirects
+const redirectsPath = path.join(distFolder, '_redirects');
+if (fs.existsSync(redirectsPath)) {
+  const redirects = fs.readFileSync(redirectsPath, 'utf-8')
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line && !line.startsWith('#'));
+
+  redirects.forEach(rule => {
+    const [from, to, status] = rule.split(/\s+/);
+    if (from && to) {
+      app.get(from, (req, res) => {
+        res.redirect(Number(status) || 301, to);
+      });
+    }
+  });
+}
+
 app.get('*', async (req, res) => {
   try {
     const { AppServerModule } = await import(serverBundlePath);

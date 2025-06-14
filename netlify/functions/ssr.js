@@ -24,9 +24,27 @@ if (fs.existsSync(redirectsPath)) {
   redirects.forEach(rule => {
     const [from, to, status] = rule.split(/\s+/);
     if (from && to) {
-      app.get(from, (req, res) => {
-        res.redirect(Number(status) || 301, to);
-      });
+      // Soporte para wildcards tipo Netlify (/*)
+      if (from.includes('*')) {
+        // Convertir a RegExp: /blog/* => ^/blog/.*$
+        const pattern = new RegExp('^' + from.replace(/\*/g, '.*') + '$');
+        app.use((req, res, next) => {
+          if (pattern.test(req.path)) {
+            res.redirect(Number(status) || 301, to.replace('*', req.path.split('/').pop() || ''));
+          } else {
+            next();
+          }
+        });
+      } else {
+        // Ruta literal
+        app.use(from, (req, res, next) => {
+          if (req.path === from) {
+            res.redirect(Number(status) || 301, to);
+          } else {
+            next();
+          }
+        });
+      }
     }
   });
 }
